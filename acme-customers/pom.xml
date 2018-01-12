@@ -7,6 +7,10 @@
     <groupId>com.acme</groupId>
     <artifactId>acme-customers</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>ib</module>
+        <module>api</module>
+    </modules>
     <packaging>pom</packaging>
 
     <properties>
@@ -15,9 +19,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-
         <!-- Server details -->
-        <payara-micro.version>4.1.2.174</payara-micro.version>
+        <payara-micro.version>4.1.2.173</payara-micro.version>
         <javaee.version>7.0</javaee.version>
     </properties>
 
@@ -30,7 +33,7 @@
             </dependency>
             <dependency>
                 <groupId>fish.payara.extras</groupId>
-                <artifactId>payara.embedded</artifactId>
+                <artifactId>payara-embedded-web</artifactId>
                 <version>${payara-micro.version}</version>
             </dependency>
         </dependencies>
