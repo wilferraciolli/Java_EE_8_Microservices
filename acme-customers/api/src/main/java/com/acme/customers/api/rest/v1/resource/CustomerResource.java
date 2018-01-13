@@ -5,6 +5,7 @@ import com.acme.customers.lib.v1.Customer;
 import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
 import javax.sql.DataSource;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,20 +15,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import com.acme.customers.lib.v1.Customer;
 import com.acme.customers.lib.v1.CustomerStatus;
 import com.acme.customers.lib.v1.response.CustomerList;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
-import javax.sql.DataSource;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.sql.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -148,7 +146,7 @@ public class CustomerResource {
     }
 
     @POST
-    public Response createCustomer(Customer newCustomer) throws SQLException {
+    public Response createCustomer(@Valid Customer newCustomer) throws SQLException {
 
         Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement("INSERT INTO customers " +
@@ -162,13 +160,12 @@ public class CustomerResource {
         stmt.setString(3, newCustomer.getLastName());
         stmt.setString(4, newCustomer.getEmail());
 
+        // stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
         if (newCustomer.getDateOfBirth() != null) {
-
             stmt.setTimestamp(5, new Timestamp(newCustomer.getDateOfBirth().getTime()));
         }
 
         if (newCustomer.getStatus() != null) {
-
             stmt.setString(6, newCustomer.getStatus().toString());
         }
 

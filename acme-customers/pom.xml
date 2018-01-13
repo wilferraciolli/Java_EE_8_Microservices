@@ -22,6 +22,7 @@
         <!-- Server details -->
         <payara-micro.version>4.1.2.174</payara-micro.version>
         <javaee.version>7.0</javaee.version>
+        <h2.version>1.4.196</h2.version>
     </properties>
 
     <dependencyManagement>
@@ -37,6 +38,13 @@
                 <artifactId>payara-embedded-web</artifactId>
                 <version>${payara-micro.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <!-- H2 inMeemory database -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
