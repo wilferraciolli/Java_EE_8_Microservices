@@ -1,7 +1,7 @@
 package com.acme.customers.api.rest.v1.resource;
 
-import com.acme.customers.api.serevices.EmptyPayloadException;
-import com.acme.customers.api.serevices.ResourceNotFoundException;
+import com.acme.customers.api.services.EmptyPayloadException;
+import com.acme.customers.api.services.ResourceNotFoundException;
 import com.acme.customers.lib.v1.Customer;
 
 import javax.annotation.Resource;

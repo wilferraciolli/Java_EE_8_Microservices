@@ -1,6 +1,6 @@
 package com.acme.customers.api.rest.v1.mappers;
 
-import com.acme.customers.api.serevices.ResourceNotFoundException;
+import com.acme.customers.api.services.ResourceNotFoundException;
 import com.acme.customers.lib.v1.common.ApiError;
 
 import javax.ws.rs.core.Response;
