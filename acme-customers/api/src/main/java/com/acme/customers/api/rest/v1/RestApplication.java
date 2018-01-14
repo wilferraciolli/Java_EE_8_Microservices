@@ -1,7 +1,12 @@
 package com.acme.customers.api.rest.v1;
 
+import com.acme.customers.api.rest.v1.resource.CustomerResource;
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This is the main starting point for every resource within this application.
@@ -10,4 +15,23 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("/v1")
 public class RestApplication extends Application {
+
+    /**
+     * Override get class method to force Jackson to be loaded, so serializtion can be used.
+     *
+     * @return
+     */
+    @Override
+    public Set<Class<?>> getClasses() {
+        //get all classes from the application
+        Set<Class<?>> classes = new HashSet<>();
+
+        classes.add(JacksonJsonProvider.class);
+
+        //add resource class
+        classes.add(CustomerResource.class);
+
+        return classes;
+
+    }
 }

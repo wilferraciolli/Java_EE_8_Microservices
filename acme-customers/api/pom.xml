@@ -28,10 +28,14 @@
             <artifactId>payara-embedded-web</artifactId>
         </dependency>
 
-        <!-- in memory database -->
+        <!-- external dependencies -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
         </dependency>
     </dependencies>
 
