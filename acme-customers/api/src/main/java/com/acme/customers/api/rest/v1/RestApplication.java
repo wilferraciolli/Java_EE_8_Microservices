@@ -1,5 +1,8 @@
 package com.acme.customers.api.rest.v1;
 
+import com.acme.customers.api.rest.v1.mappers.EmptyPayloadMapper;
+import com.acme.customers.api.rest.v1.mappers.ResourceNotFoundMapper;
+import com.acme.customers.api.rest.v1.providers.JacksonProvider;
 import com.acme.customers.api.rest.v1.resource.CustomerResource;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 
@@ -27,10 +30,14 @@ public class RestApplication extends Application {
         Set<Class<?>> classes = new HashSet<>();
 
         classes.add(JacksonJsonProvider.class);
+        classes.add(JacksonProvider.class);
 
         //add resource class
         classes.add(CustomerResource.class);
 
+        //Add exception mapper classes
+        classes.add(EmptyPayloadMapper.class);
+        classes.add(ResourceNotFoundMapper.class);
         return classes;
 
     }

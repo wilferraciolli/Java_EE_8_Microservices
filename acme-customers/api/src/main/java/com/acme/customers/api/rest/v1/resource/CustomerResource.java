@@ -1,5 +1,7 @@
 package com.acme.customers.api.rest.v1.resource;
 
+import com.acme.customers.api.serevices.EmptyPayloadException;
+import com.acme.customers.api.serevices.ResourceNotFoundException;
 import com.acme.customers.lib.v1.Customer;
 
 import javax.annotation.Resource;
@@ -15,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import com.acme.customers.lib.v1.CustomerStatus;
 import com.acme.customers.lib.v1.response.CustomerList;
 
@@ -24,10 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * The type Customer resource. Application single instance bean.
@@ -66,7 +66,8 @@ public class CustomerResource {
 
             try {
                 if (con != null) con.close();
-            } catch (SQLException ignored) { }
+            } catch (SQLException ignored) {
+            }
         }
     }
 
@@ -125,28 +126,33 @@ public class CustomerResource {
         stmt.setString(1, id);
         ResultSet rs = stmt.executeQuery();
 
-        if (rs.next()) {
-
-            Customer customer = new Customer();
-            customer.setId(rs.getString("id"));
-            customer.setUpdatedAt(rs.getDate("updated_at"));
-            customer.setCreatedAt(rs.getDate("created_at"));
-            customer.setFirstName(rs.getString("first_name"));
-            customer.setLastName(rs.getString("last_name"));
-            customer.setEmail(rs.getString("email"));
-            customer.setDateOfBirth(rs.getDate("date_of_birth"));
-            customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
-
-            con.close();
-
-            return Response.ok(customer).build();
+        if (!rs.next()) {
+            //throw an error if customer was not found
+            throw new ResourceNotFoundException(Customer.class.getSimpleName(), id);
         }
 
-        return Response.noContent().build();
+        Customer customer = new Customer();
+        customer.setId(rs.getString("id"));
+        customer.setUpdatedAt(rs.getDate("updated_at"));
+        customer.setCreatedAt(rs.getDate("created_at"));
+        customer.setFirstName(rs.getString("first_name"));
+        customer.setLastName(rs.getString("last_name"));
+        customer.setEmail(rs.getString("email"));
+        customer.setDateOfBirth(rs.getDate("date_of_birth"));
+        customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
+
+        con.close();
+
+        return Response.ok(customer).build();
     }
 
     @POST
     public Response createCustomer(@Valid Customer newCustomer) throws SQLException {
+
+        //check if the value passed in is not null
+        if (Objects.isNull(newCustomer)) {
+            throw new EmptyPayloadException(Customer.class.getSimpleName());
+        }
 
         Connection con = dataSource.getConnection();
         PreparedStatement stmt = con.prepareStatement("INSERT INTO customers " +
@@ -163,7 +169,7 @@ public class CustomerResource {
         // stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
         if (newCustomer.getDateOfBirth() != null) {
             stmt.setTimestamp(5, new Timestamp(newCustomer.getDateOfBirth().getTime()));
-        }else{
+        } else {
             stmt.setTimestamp(5, new Timestamp(new Date().getTime()));
 
         }

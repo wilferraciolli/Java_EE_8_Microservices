@@ -3,7 +3,7 @@ package com.acme.customers.lib.v1.common;
 import java.util.UUID;
 
 /**
- * The type Api error. Core classes to be reused by multipkle micro services.
+ * The type Api error. Core classes to be reused by multiple micro services.
  */
 public class ApiError {
 
