@@ -163,6 +163,9 @@ public class CustomerResource {
         // stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
         if (newCustomer.getDateOfBirth() != null) {
             stmt.setTimestamp(5, new Timestamp(newCustomer.getDateOfBirth().getTime()));
+        }else{
+            stmt.setTimestamp(5, new Timestamp(new Date().getTime()));
+
         }
 
         if (newCustomer.getStatus() != null) {
