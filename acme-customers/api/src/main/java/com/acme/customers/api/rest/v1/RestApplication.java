@@ -5,9 +5,8 @@ import com.acme.customers.api.rest.v1.filters.CorsFilter;
 import com.acme.customers.api.rest.v1.filters.LoggerInterceptor;
 import com.acme.customers.api.rest.v1.mappers.EmptyPayloadMapper;
 import com.acme.customers.api.rest.v1.mappers.ResourceNotFoundMapper;
-import com.acme.customers.api.rest.v1.providers.JacksonProvider;
 import com.acme.customers.api.rest.v1.resource.CustomerResource;
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import org.glassfish.jersey.jsonp.JsonProcessingFeature;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -32,8 +31,10 @@ public class RestApplication extends Application {
         //get all classes from the application
         Set<Class<?>> classes = new HashSet<>();
 
-        classes.add(JacksonJsonProvider.class);
-        classes.add(JacksonProvider.class);
+        //add JsonProcessingFeature to make it more lightweiht
+        classes.add(JsonProcessingFeature.class);
+        //classes.add(JacksonJsonProvider.class);
+        //classes.add(JacksonProvider.class);
 
         //add resource class
         classes.add(CustomerResource.class);
