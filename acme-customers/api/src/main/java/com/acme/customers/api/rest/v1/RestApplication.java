@@ -1,5 +1,8 @@
 package com.acme.customers.api.rest.v1;
 
+import com.acme.customers.api.rest.v1.filters.AuthFilter;
+import com.acme.customers.api.rest.v1.filters.CorsFilter;
+import com.acme.customers.api.rest.v1.filters.LoggerInterceptor;
 import com.acme.customers.api.rest.v1.mappers.EmptyPayloadMapper;
 import com.acme.customers.api.rest.v1.mappers.ResourceNotFoundMapper;
 import com.acme.customers.api.rest.v1.providers.JacksonProvider;
@@ -38,7 +41,12 @@ public class RestApplication extends Application {
         //Add exception mapper classes
         classes.add(EmptyPayloadMapper.class);
         classes.add(ResourceNotFoundMapper.class);
-        return classes;
 
+        //Add filter classes
+        classes.add(AuthFilter.class);
+        classes.add(CorsFilter.class);
+        classes.add(LoggerInterceptor.class);
+
+        return classes;
     }
 }
