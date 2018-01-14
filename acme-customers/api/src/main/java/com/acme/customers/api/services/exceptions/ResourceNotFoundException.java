@@ -1,4 +1,4 @@
-package com.acme.customers.api.services;
+package com.acme.customers.api.services.exceptions;
 
 /**
  * The type Resource not found exception. Represents 404.

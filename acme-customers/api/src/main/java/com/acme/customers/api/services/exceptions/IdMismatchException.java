@@ -1,4 +1,4 @@
-package com.acme.customers.api.services;
+package com.acme.customers.api.services.exceptions;
 
 /**
  * The type Id mismatch exception. Represents 404.
