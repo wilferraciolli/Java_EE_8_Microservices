@@ -14,6 +14,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -71,9 +73,15 @@ public class CustomerServiceImpl implements CustomerService {
         //clear the id
         customerEntity.setId(null);
 
-        entityManager.persist(customer);
+        //add date og=f birth if null as hack
+        if (customer.getDateOfBirth() == null) {
+            customer.setDateOfBirth(new Timestamp(new Date().getTime()));
+        }
+
+        entityManager.persist(customerEntity);
 
         return CustomerMapper.toCustomer(customerEntity);
+
     }
 
     @Override

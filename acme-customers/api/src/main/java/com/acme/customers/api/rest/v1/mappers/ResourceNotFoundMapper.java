@@ -9,7 +9,7 @@ import javax.ws.rs.ext.Provider;
 import java.util.UUID;
 
 /**
- * provider to handle ResourceNotFoundException exception when it is thrown.
+ * Provider to handle ResourceNotFoundException exception when it is thrown.
  */
 @Provider
 public class ResourceNotFoundMapper implements ExceptionMapper<ResourceNotFoundException> {
