@@ -1,256 +1,121 @@
 package com.acme.customers.api.services.impl;
 
+import com.acme.customers.api.mappers.CustomerMapper;
+import com.acme.customers.api.models.db.CustomerEntity;
 import com.acme.customers.api.services.CustomerService;
 import com.acme.customers.api.services.exceptions.EmptyPayloadException;
 import com.acme.customers.api.services.exceptions.IdMismatchException;
 import com.acme.customers.api.services.exceptions.ResourceNotFoundException;
 import com.acme.customers.lib.v1.Customer;
-import com.acme.customers.lib.v1.CustomerStatus;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
- * The type Customer service implementation.
+ * The type Customer service implementation. This is the stateless bean to manage customer details.
  */
 @ApplicationScoped
+@Transactional(Transactional.TxType.REQUIRED)
 public class CustomerServiceImpl implements CustomerService {
 
-    //Do a JNDI lookup to find the data source
-    @Resource(lookup = "java:global/CustomersDS")
-    private DataSource dataSource;
-
-    //create the Customer table on the database
-    @PostConstruct
-    private void init() {
-
-        Connection con = null;
-
-        try {
-            con = dataSource.getConnection();
-
-            PreparedStatement stmt = con.prepareStatement("CREATE TABLE customers(" +
-                    "id varchar(36) primary key, first_name varchar(255), last_name varchar(255), " +
-                    "email varchar(255), status varchar(255), date_of_birth TIMESTAMP, " +
-                    "updated_at TIMESTAMP, created_at TIMESTAMP)");
-
-            stmt.executeUpdate();
-
-
-        } catch (SQLException e) {
-
-            throw new RuntimeException(e);
-        } finally {
-
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException ignored) {
-            }
-        }
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Customer findCustomerById(String id) throws SQLException {
 
-        Connection con = dataSource.getConnection();
-        PreparedStatement stmt = con.prepareStatement("SELECT * FROM customers WHERE id = ? ORDER BY id");
-        stmt.setString(1, id);
-        ResultSet rs = stmt.executeQuery();
+        CustomerEntity customerEntity = entityManager.find(CustomerEntity.class, id);
 
-        if (!rs.next()) {
-
+        if (Objects.isNull(customerEntity)) {
             throw new ResourceNotFoundException(Customer.class.getSimpleName(), id);
         }
 
-        Customer customer = new Customer();
-        customer.setId(rs.getString("id"));
-        customer.setUpdatedAt(rs.getDate("updated_at"));
-        customer.setCreatedAt(rs.getDate("created_at"));
-        customer.setFirstName(rs.getString("first_name"));
-        customer.setLastName(rs.getString("last_name"));
-        customer.setEmail(rs.getString("email"));
-        customer.setDateOfBirth(rs.getDate("date_of_birth"));
-        customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
-
-        con.close();
-
-        return customer;
+        return CustomerMapper.toCustomer(customerEntity);
     }
 
     @Override
     public List<Customer> findCustomers(Integer limit, Integer offset) throws SQLException {
 
-        List<Customer> customers = new ArrayList<>();
+        TypedQuery<CustomerEntity> query = entityManager.createNamedQuery("CustomerEntity.findAll", CustomerEntity.class);
 
-        String query = "SELECT * FROM customers ORDER BY id";
-
+        //set pagination params
         if (limit != null && limit > 0) {
-
-            query += " LIMIT " + limit;
+            query = query.setMaxResults(limit);
         }
-
         if (offset != null && offset > 0) {
-
-            query += " OFFSET " + offset;
+            query = query.setFirstResult(offset);
         }
 
-        Connection con = dataSource.getConnection();
-        PreparedStatement stmt = con.prepareStatement(query);
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-
-            Customer customer = new Customer();
-            customer.setId(rs.getString("id"));
-            customer.setUpdatedAt(rs.getDate("updated_at"));
-            customer.setCreatedAt(rs.getDate("created_at"));
-            customer.setFirstName(rs.getString("first_name"));
-            customer.setLastName(rs.getString("last_name"));
-            customer.setEmail(rs.getString("email"));
-            customer.setDateOfBirth(rs.getTimestamp("date_of_birth"));
-            customer.setStatus(CustomerStatus.valueOf(rs.getString("status")));
-
-            customers.add(customer);
-        }
-
-        con.close();
-
-        return customers;
+        //return list of customers
+        List<CustomerEntity> customerEntities = query.getResultList();
+        return customerEntities.stream()
+                .map(CustomerMapper::toCustomer)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Customer createCustomer(Customer customer) throws SQLException {
-
-        //check if the value passed in is not nul
-        if (customer == null) {
+        if (Objects.isNull(customer)) {
             throw new EmptyPayloadException(Customer.class.getSimpleName());
         }
-        Connection con = dataSource.getConnection();
-        PreparedStatement stmt = con.prepareStatement("INSERT INTO customers " +
-                "(id, first_name, last_name, email, date_of_birth, status, created_at, updated_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-        String id = UUID.randomUUID().toString();
+        //get the customer given by the API
+        CustomerEntity customerEntity = CustomerMapper.toCustomerEntity(customer);
+        //clear the id
+        customerEntity.setId(null);
 
-        stmt.setString(1, id);
-        stmt.setString(2, customer.getFirstName());
-        stmt.setString(3, customer.getLastName());
-        stmt.setString(4, customer.getEmail());
+        entityManager.persist(customer);
 
-        if (customer.getDateOfBirth() != null) {
-            stmt.setTimestamp(5, new Timestamp(customer.getDateOfBirth().getTime()));
-        } else {
-            stmt.setTimestamp(5, new Timestamp(new Date().getTime()));
-        }
-
-        if (customer.getStatus() != null) {
-            stmt.setString(6, customer.getStatus().toString());
-        }
-
-        Timestamp timestampNow = new Timestamp(new Date().getTime());
-
-        stmt.setTimestamp(7, timestampNow);
-        stmt.setTimestamp(8, timestampNow);
-
-        stmt.executeUpdate();
-
-        customer.setId(id);
-        customer.setUpdatedAt(timestampNow);
-        customer.setCreatedAt(timestampNow);
-
-        con.close();
-
-        return customer;
+        return CustomerMapper.toCustomer(customerEntity);
     }
 
     @Override
     public Customer updateCustomer(String id, Customer customer) throws SQLException {
 
-        if (customer == null) {
+        if (Objects.isNull(customer)) {
             throw new EmptyPayloadException(Customer.class.getSimpleName());
         }
 
+        //check that the id match the object passed in with the URL
         if (!id.equals(customer.getId())) {
             throw new IdMismatchException(id, customer.getId());
         }
 
-        Connection con = dataSource.getConnection();
-
-        PreparedStatement stmt = con.prepareStatement("SELECT * FROM customers WHERE id = ? ORDER BY id");
-        stmt.setString(1, id);
-        ResultSet rs = stmt.executeQuery();
-
-        if (!rs.next()) {
-
+        //load the current customer for the id
+        CustomerEntity customerEntity = entityManager.find(CustomerEntity.class, id);
+        if (customerEntity == null) {
             throw new ResourceNotFoundException(Customer.class.getSimpleName(), id);
         }
 
-        Timestamp createdAt = rs.getTimestamp("created_at");
+        //build the customer with the details to be updated
+        CustomerEntity updatedCustomerEntity = CustomerMapper.toCustomerEntity(customer);
 
-        stmt = con.prepareStatement("UPDATE customers SET " +
-                "id = ?, first_name = ?, last_name = ?, email = ?, date_of_birth = ?, status = ?, updated_at = ? " +
-                "WHERE id = ?");
+        updatedCustomerEntity.setId(id);
+        updatedCustomerEntity.setCreatedAt(customerEntity.getCreatedAt());
 
-        stmt.setString(1, id);
-        stmt.setString(2, customer.getFirstName());
-        stmt.setString(3, customer.getLastName());
-        stmt.setString(4, customer.getEmail());
+        //persist the update
+        updatedCustomerEntity = entityManager.merge(updatedCustomerEntity);
 
-        if (customer.getDateOfBirth() != null) {
+        return CustomerMapper.toCustomer(updatedCustomerEntity);
 
-            stmt.setTimestamp(5, new Timestamp(customer.getDateOfBirth().getTime()));
-        } else {
-            stmt.setTimestamp(5, new Timestamp(new Date().getTime()));
-        }
-
-
-        if (customer.getStatus() != null) {
-            stmt.setString(6, customer.getStatus().toString());
-        }
-
-        Timestamp timestampNow = new Timestamp(new Date().getTime());
-
-        stmt.setTimestamp(7, timestampNow);
-        stmt.setString(8, id);
-
-        stmt.executeUpdate();
-
-        customer.setCreatedAt(createdAt);
-        customer.setUpdatedAt(timestampNow);
-
-        con.close();
-
-        return customer;
     }
 
     @Override
     public void deleteCustomerById(String id) throws SQLException {
 
-        Connection con = dataSource.getConnection();
+        CustomerEntity customerEntity = entityManager.find(CustomerEntity.class, id);
 
-        PreparedStatement stmt = con.prepareStatement("SELECT * FROM customers WHERE id = ? ORDER BY id");
-        stmt.setString(1, id);
-        ResultSet rs = stmt.executeQuery();
-
-        if (!rs.next()) {
-
+        if (Objects.isNull(customerEntity)) {
             throw new ResourceNotFoundException(Customer.class.getSimpleName(), id);
         }
 
-        stmt = con.prepareStatement("DELETE FROM customers WHERE id = ?");
-        stmt.setString(1, id);
-
-        stmt.executeUpdate();
-
-        con.close();
+        entityManager.remove(customerEntity);
     }
 }
