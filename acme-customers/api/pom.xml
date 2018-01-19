@@ -12,6 +12,9 @@
 
     <artifactId>acme-customers-api</artifactId>
 
+    <name>ACME Customers Service API</name>
+    <description>API for the ACME Customers Service</description>
+
     <dependencies>
         <dependency>
             <groupId>com.acme</groupId>
