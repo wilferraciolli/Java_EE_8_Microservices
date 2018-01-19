@@ -1,21 +1,37 @@
-package com.acme.orders.lib.v1;
+package com.acme.orders.api.models.db;
 
-import com.acme.orders.lib.v1.common.BaseType;
+import com.acme.orders.api.models.db.common.BaseEntity;
+import com.acme.orders.lib.v1.OrderStatus;
 
-import java.util.List;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
- * The type Order.
+ * The type Order entity. Order entity bean to map an order to the table.
  */
-public class Order extends BaseType {
+@Entity
+@Table(name = "orders")
+@NamedQueries({
+        @NamedQuery(name = "OrderEntity.findAll", query = "SELECT o FROM OrderEntity o"),
+        @NamedQuery(name = "OrderEntity.findAllCount", query = "SELECT count(o) FROM OrderEntity o")
+})
+public class OrderEntity extends BaseEntity {
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private OrderStatus status;
-    private Set<OrderItem> cart;
 
-    //put the ids of objects that is part of another micro service
+    @NotNull
+    @Column(name = "customer_id")
     private String customerId;
+
+    @Column(name = "transaction_id")
     private String transactionId;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<OrderItemEntity> cart;
 
     /**
      * Gets status.
@@ -33,24 +49,6 @@ public class Order extends BaseType {
      */
     public void setStatus(OrderStatus status) {
         this.status = status;
-    }
-
-    /**
-     * Gets cart.
-     *
-     * @return the cart
-     */
-    public Set<OrderItem> getCart() {
-        return cart;
-    }
-
-    /**
-     * Sets cart.
-     *
-     * @param cart the cart
-     */
-    public void setCart(Set<OrderItem> cart) {
-        this.cart = cart;
     }
 
     /**
@@ -87,5 +85,23 @@ public class Order extends BaseType {
      */
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    /**
+     * Gets cart.
+     *
+     * @return the cart
+     */
+    public Set<OrderItemEntity> getCart() {
+        return cart;
+    }
+
+    /**
+     * Sets cart.
+     *
+     * @param cart the cart
+     */
+    public void setCart(Set<OrderItemEntity> cart) {
+        this.cart = cart;
     }
 }
