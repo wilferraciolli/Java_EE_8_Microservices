@@ -9,7 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>acme-customers-lib</artifactId>
+    <name>ACME Customers Lib</name>
+    <description>Library interfaces for the ACME Customers Service</description>
 
+    <artifactId>acme-customers-lib</artifactId>
 
 </project>
