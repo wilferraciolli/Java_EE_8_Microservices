@@ -9,7 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lib</artifactId>
+    <name>ACME Orders Lib</name>
+    <description>Library interfaces for the ACME Orders Service</description>
 
+    <artifactId>acme-orders-lib</artifactId>
 
 </project>
