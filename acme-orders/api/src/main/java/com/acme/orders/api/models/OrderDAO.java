@@ -1,7 +1,6 @@
 package com.acme.orders.api.models;
 
 import com.acme.orders.api.models.db.OrderEntity;
-import com.codahale.metrics.Timer;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -12,8 +11,6 @@ import java.util.List;
  * The type Order dao. Data Access Object implemetation.
  */
 public class OrderDAO extends AbstractDAO<OrderEntity> {
-
-    private Timer findAllTimer;
 
     /**
      * Instantiates a new Order dao.
@@ -37,22 +34,14 @@ public class OrderDAO extends AbstractDAO<OrderEntity> {
         Query<OrderEntity> query = namedQuery("OrderEntity.findAll");
 
         if (limit != null && limit > 0) {
-
             query = query.setMaxResults(limit);
         }
 
         if (offset != null && offset > 0) {
-
             query = query.setFirstResult(offset);
         }
 
-        final Timer.Context context = findAllTimer.time();
-
-        try {
-            return list(query);
-        } finally {
-            context.stop();
-        }
+        return list(query);
     }
 
     /**
