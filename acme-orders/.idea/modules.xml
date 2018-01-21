@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/acme-orders.iml" filepath="$PROJECT_DIR$/acme-orders.iml" />
+      <module fileurl="file://$PROJECT_DIR$/api/acme-orders-api.iml" filepath="$PROJECT_DIR$/api/acme-orders-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib/acme-orders-lib.iml" filepath="$PROJECT_DIR$/lib/acme-orders-lib.iml" />
+    </modules>
+  </component>
+</project>
