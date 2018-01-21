@@ -10,6 +10,10 @@ import com.acme.orders.api.services.exceptions.ResourceNotFoundException;
 import com.acme.orders.lib.v1.Order;
 import com.acme.orders.lib.v1.OrderStatus;
 import com.acme.orders.lib.v1.common.OrderServiceErrorCode;
+import com.codahale.metrics.Counter;
+import com.codahale.metrics.Histogram;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 
 import java.time.Instant;
 import java.util.Date;
@@ -17,24 +21,44 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The type Order service implementation.
+ * Order service implementation.
  */
 public class OrderServiceImpl implements OrderService {
 
     private OrderDAO orderDAO;
 
+    //Add custom Metrics
+    private Meter createMeter;
+    private Meter completeMeter;
+    private Meter canceledMeter;
+
+    //create counter to trocess transacions
+    private Counter processingCounter;
+    private Histogram cartHistogram;
+
     /**
      * Instantiates a new Order service.
      *
-     * @param orderDAO the order dao
+     * @param orderDAO       the order dao
+     * @param metricRegistry the metric registry
      */
-    public OrderServiceImpl(OrderDAO orderDAO) {
+    public OrderServiceImpl(OrderDAO orderDAO, MetricRegistry metricRegistry) {
+
+        //instantiate the DAO
         this.orderDAO = orderDAO;
+
+        //instantiate the metrics
+        this.createMeter = metricRegistry.meter(OrderServiceImpl.class.getName() + ".create-order");
+        this.completeMeter = metricRegistry.meter(OrderServiceImpl.class.getName() + ".complete-order");
+        this.canceledMeter = metricRegistry.meter(OrderServiceImpl.class.getName() + ".cancel-order");
+
+        //instantiate histogram
+        this.processingCounter = metricRegistry.counter(OrderServiceImpl.class.getName() + ".orders-processing");
+        this.cartHistogram = metricRegistry.histogram(OrderServiceImpl.class.getName() + ".orders-cart");
     }
 
     @Override
     public Order findOrderById(String id) {
-
         OrderEntity orderEntity = orderDAO.findById(id);
 
         if (orderEntity == null) {
@@ -87,6 +111,12 @@ public class OrderServiceImpl implements OrderService {
         //persist to the database
         orderDAO.create(orderEntity);
 
+        //add as metric
+        createMeter.mark();
+
+        //update histogram
+        cartHistogram.update(orderEntity.getCart().size());
+
         return OrderMapper.toOrder(orderEntity);
     }
 
@@ -103,13 +133,22 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderServiceException(OrderServiceErrorCode.ORDER_STATE_INCORRECT);
         }
 
+        //mark the transaction as processing
+        processingCounter.inc();
+
         try {
             //this will call the pay service later on
             Thread.sleep(10000);
         } catch (InterruptedException ignored) {
         }
 
+        //set the transaction to finish
+        processingCounter.dec();
+
         orderEntity.setStatus(OrderStatus.COMPLETED);
+
+        //add as metric
+        completeMeter.mark();
 
         return OrderMapper.toOrder(orderEntity);
     }
@@ -128,6 +167,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderEntity.setStatus(OrderStatus.CANCELED);
+
+        //add as metric
+        canceledMeter.mark();
 
         return OrderMapper.toOrder(orderEntity);
     }

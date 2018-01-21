@@ -2,15 +2,10 @@ package com.acme.orders.api.rest.v1.resources;
 
 import com.acme.orders.api.services.OrderService;
 import com.acme.orders.lib.v1.Order;
+import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -43,6 +38,7 @@ public class OrderResource {
      */
     @GET
     @UnitOfWork
+    @Timed
     public Response getOrder(@QueryParam("limit") Integer limit,
                              @QueryParam("offset") Integer offset) {
 
@@ -61,6 +57,7 @@ public class OrderResource {
     @GET
     @Path("/{id}")
     @UnitOfWork
+    @Timed
     public Response getOrder(@PathParam("id") String id) {
 
         Order order = orderService.findOrderById(id);
@@ -76,6 +73,7 @@ public class OrderResource {
      */
     @POST
     @UnitOfWork
+    @Timed
     public Response createOrder(Order newOrder) {
 
         Order order = orderService.createOrder(newOrder);
@@ -92,6 +90,7 @@ public class OrderResource {
     @POST
     @Path("/{id}/complete")
     @UnitOfWork
+    @Timed
     public Response completeOrder(@PathParam("id") String id) {
 
         Order order = orderService.completeOrder(id);
@@ -108,6 +107,7 @@ public class OrderResource {
     @POST
     @Path("/{id}/cancel")
     @UnitOfWork
+    @Timed
     public Response cancelOrder(@PathParam("id") String id) {
 
         Order order = orderService.cancelOrder(id);

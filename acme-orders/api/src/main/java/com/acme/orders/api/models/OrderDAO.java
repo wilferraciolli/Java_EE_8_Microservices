@@ -1,6 +1,8 @@
 package com.acme.orders.api.models;
 
 import com.acme.orders.api.models.db.OrderEntity;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -12,13 +14,20 @@ import java.util.List;
  */
 public class OrderDAO extends AbstractDAO<OrderEntity> {
 
+    //add timer to analyse calls performance
+    private Timer findAllTimer;
+
     /**
      * Instantiates a new Order dao.
      *
      * @param sessionFactory the session factory
+     * @param metricRegistry the metric registry
      */
-    public OrderDAO(SessionFactory sessionFactory) {
+    public OrderDAO(SessionFactory sessionFactory, MetricRegistry metricRegistry) {
         super(sessionFactory);
+
+        //instantiate the find all time to analyse how long the find all mehod is taking
+        this.findAllTimer = metricRegistry.timer(OrderDAO.class.getName() + ".query-find-all");
     }
 
     /**
@@ -36,12 +45,19 @@ public class OrderDAO extends AbstractDAO<OrderEntity> {
         if (limit != null && limit > 0) {
             query = query.setMaxResults(limit);
         }
-
         if (offset != null && offset > 0) {
             query = query.setFirstResult(offset);
         }
 
-        return list(query);
+        //create the timer to start recording the time
+        final Timer.Context context = findAllTimer.time();
+
+        try {
+            return list(query);
+        } finally {
+            //stop tracking the time regardless if fails, then return the context
+            context.stop();
+        }
     }
 
     /**

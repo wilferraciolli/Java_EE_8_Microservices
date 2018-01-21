@@ -3,11 +3,7 @@ package com.acme.orders.api.rest.v1;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
 import com.acme.orders.api.models.db.OrderItemEntity;
-import com.acme.orders.api.rest.v1.mappers.EmptyPayloadMapper;
-import com.acme.orders.api.rest.v1.mappers.GeneralMapper;
-import com.acme.orders.api.rest.v1.mappers.IdMismatchMapper;
-import com.acme.orders.api.rest.v1.mappers.OrderServiceMapper;
-import com.acme.orders.api.rest.v1.mappers.ResourceNotFoundMapper;
+import com.acme.orders.api.rest.v1.mappers.*;
 import com.acme.orders.api.rest.v1.resources.OrderResource;
 import com.acme.orders.api.services.OrderService;
 import com.acme.orders.api.services.impl.OrderServiceImpl;
@@ -72,7 +68,8 @@ public class RestApplication extends Application<RestConfiguration> {
 
         //instantiate dependencies
         OrderService orderService = new OrderServiceImpl(
-                new OrderDAO(hibernate.getSessionFactory())
+                new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
+                environment.metrics()
         );
 
         //configure Jersey and add all required classes to it
