@@ -1,0 +1,390 @@
+{
+	"info": {
+		"name": "Java EE Microservices",
+		"_postman_id": "b2c30c6f-373d-f579-7c0e-d51ddda6b253",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customers API",
+			"description": "",
+			"item": [
+				{
+					"name": "get Customers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"acme-customers-api-1.0.0-SNAPSHOT",
+								"v1",
+								"customers"
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "207a5f32-5169-4ac6-afb7-78da01a93ad4",
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/localhost:8080/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"localhost:8080",
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "get Customer by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/092abfb0-6bde-4b02-a2a2-3f3b03d597a9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"acme-customers-api-1.0.0-SNAPSHOT",
+								"v1",
+								"customers",
+								"092abfb0-6bde-4b02-a2a2-3f3b03d597a9"
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "8a12af89-027f-4f69-a534-3f725b8be8ec",
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/localhost:8080/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"localhost:8080",
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "Delete Customer by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/092abfb0-6bde-4b02-a2a2-3f3b03d597a9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"acme-customers-api-1.0.0-SNAPSHOT",
+								"v1",
+								"customers",
+								"092abfb0-6bde-4b02-a2a2-3f3b03d597a9"
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "cd1b5e11-ab25-4a1b-bf49-e6c0db8bfdde",
+							"name": "Default",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{url}}/localhost:8080/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"localhost:8080",
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Wiliam\",\n  \"lastName\": \"Ferraciolli\",\n  \"email\": \"wiliam334@hotmail.com\",\n  \"dateOfBirth\": \"1990-09-11T07:40:27:40+00:00\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"acme-customers-api-1.0.0-SNAPSHOT",
+								"v1",
+								"customers"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\":\"1234\",\n  \"firstName\": \"Wiliam Updated\",\n  \"lastName\": \"Ferraciolli updated\",\n  \"email\": \"wiliam334@hotmail.com updt\",\n  \"dateOfBirth\": \"1990-09-11T07:40:27:40+00:00\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/1234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"acme-customers-api-1.0.0-SNAPSHOT",
+								"v1",
+								"customers",
+								"1234"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders API",
+			"description": "",
+			"item": [
+				{
+					"name": "Get orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9000/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"orders"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Create order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"customerId\": \"1234\",\n\t\"cart\": [\n\t\t{\n\t\t\t\"productId\": \"100\"\n\t\t}\n\t\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9000/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"orders"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Complete order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9000/orders/{{orderId}}/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"orders",
+								"{{orderId}}",
+								"complete"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9000/orders/{{orderId}}/cancel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"orders",
+								"{{orderId}}",
+								"cancel"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get Metrics (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:9001/metrics",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9001",
+							"path": [
+								"metrics"
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
