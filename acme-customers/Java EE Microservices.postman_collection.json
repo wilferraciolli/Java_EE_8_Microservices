@@ -28,7 +28,7 @@
 					},
 					"response": [
 						{
-							"id": "5ac99930-67ea-4323-bea4-aa75753c4183",
+							"id": "2dec2020-a5e4-451b-ba18-ca3d75f6ad3d",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
@@ -62,7 +62,7 @@
 					},
 					"response": [
 						{
-							"id": "74b1fe21-266d-4206-831e-df26e257226d",
+							"id": "0549e967-8dc4-494b-8f3d-abf79631b136",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
@@ -95,7 +95,7 @@
 					},
 					"response": [
 						{
-							"id": "bd01ace4-90cb-412e-8af8-ce171139d23f",
+							"id": "7e7da7ba-d379-471f-bd1a-006c35042499",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
