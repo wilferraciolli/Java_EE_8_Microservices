@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:tns="http://acme.com/schemes/ecommerce/v1" xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://acme.com/schemes/ecommerce/v1"
+        xmlns:common="http://acme.com/schemes/common/v1"
+        elementFormDefault="qualified" version="1.0">
+
+    <import namespace="http://acme.com/schemes/common/v1"
+            schemaLocation="../../common/v1/CommonTypes.xsd"/>
+
+    <complexType name="Customer">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="firstName" type="string" minOccurs="0" />
+                    <element name="lastName" type="string" minOccurs="0" />
+                    <element name="status" type="tns:CustomerStatus" minOccurs="0" />
+                    <element name="email" type="string" minOccurs="0" />
+                    <element name="dateOfBirth" type="dateTime" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="CustomerList">
+        <sequence>
+            <element name="customers" type="tns:Customer" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <simpleType name="CustomerStatus">
+        <restriction base="string">
+            <enumeration value="ACTIVE" />
+            <enumeration value="INACTIVE" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="Transaction">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="currency" type="string" minOccurs="0" />
+                    <element name="amount" type="decimal" minOccurs="0" />
+                    <element name="nonce" type="string" minOccurs="0" />
+                    <element name="status" type="tns:TransactionStatus" minOccurs="0" />
+                    <element name="gatewayDeclineCode" type="string" minOccurs="0" />
+                    <element name="processorResponseCode" type="string" minOccurs="0" />
+                    <element name="processorResponseText" type="string" minOccurs="0" />
+                    <element name="paymentMethodType" type="tns:PaymentMethodType" minOccurs="0" />
+                    <element name="customer" type="tns:Customer" minOccurs="0" />
+                    <element name="gatewayTransactionId" type="string" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="TransactionList">
+        <sequence>
+            <element name="transactions" type="tns:Transaction" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <simpleType name="TransactionStatus">
+        <restriction base="string">
+            <enumeration value="SETTLED" />
+            <enumeration value="DECLINED" />
+            <enumeration value="FAILED" />
+        </restriction>
+    </simpleType>
+
+    <simpleType name="PaymentMethodType">
+        <restriction base="string">
+            <enumeration value="CREDIT_CARD" />
+            <enumeration value="PAYPAL" />
+            <enumeration value="APPLE_PAY" />
+            <enumeration value="OTHER" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="Supplier">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="companyName" type="string" minOccurs="0" />
+                    <element name="status" type="tns:SupplierStatus" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="SupplierList">
+        <sequence>
+            <element name="suppliers" type="tns:Supplier" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <simpleType name="SupplierStatus">
+        <restriction base="string">
+            <enumeration value="ACTIVE" />
+            <enumeration value="INACTIVE" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="Product">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="title" type="string" minOccurs="0" />
+                    <element name="price" type="decimal" minOccurs="0" />
+                    <element name="currency" type="string" minOccurs="0" />
+                    <element name="supplier" type="tns:Supplier" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="ProductList">
+        <sequence>
+            <element name="products" type="tns:Product" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <complexType name="Order">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="status" type="tns:OrderStatus" minOccurs="0" />
+                    <element name="cart" type="tns:OrderItemList" minOccurs="0" />
+                    <element name="customer" type="tns:Customer" minOccurs="0" />
+                    <element name="transaction" type="tns:Transaction" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="OrderList">
+        <sequence>
+            <element name="orders" type="tns:Order" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+    <simpleType name="OrderStatus">
+        <restriction base="string">
+            <enumeration value="NEW" />
+            <enumeration value="COMPLETED" />
+            <enumeration value="CANCELED" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="OrderItem">
+        <complexContent>
+            <extension base="common:BaseType">
+                <sequence>
+                    <element name="title" type="string" minOccurs="0" />
+                    <element name="price" type="decimal" minOccurs="0" />
+                    <element name="amount" type="decimal" minOccurs="0" />
+                    <element name="quantity" type="decimal" minOccurs="0" />
+                    <element name="currency" type="string" minOccurs="0" />
+                    <element name="product" type="tns:Product" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="OrderItemList">
+        <sequence>
+            <element name="items" type="tns:OrderItem" minOccurs="0" maxOccurs="unbounded" />
+        </sequence>
+    </complexType>
+
+</schema>

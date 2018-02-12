@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:tns="http://acme.com/schemes/common/v1" xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://acme.com/schemes/common/v1" elementFormDefault="qualified" version="1.0">
+
+    <complexType name="BaseType">
+        <sequence>
+            <element name="id" type="long" minOccurs="0" />
+            <element name="createdAt" type="dateTime" minOccurs="0" />
+            <element name="updatedAt" type="dateTime" minOccurs="0" />
+        </sequence>
+    </complexType>
+
+    <complexType name="BaseMessageType">
+        <complexContent>
+            <extension base="tns:BaseType" />
+        </complexContent>
+    </complexType>
+
+    <complexType name="BaseErrorType">
+        <sequence>
+            <element name="ref" type="string" minOccurs="0" />
+            <element name="status" type="integer" minOccurs="0" />
+            <element name="code" type="string" minOccurs="0" />
+        </sequence>
+    </complexType>
+
+</schema>

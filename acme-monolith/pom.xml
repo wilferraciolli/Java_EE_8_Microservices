@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.acme</groupId>
+    <artifactId>acme-monolith</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <modules>
+        <module>scheme</module>
+        <module>models</module>
+        <module>services</module>
+        <module>soap</module>
+        <module>ear</module>
+        <module>web</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <name>ACME Monolith</name>
+
+    <inceptionYear>2017</inceptionYear>
+    <description>ACME Monolith for the eCommerce application</description>
+
+    <url>https://acme.com</url>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <javaee.version>7.0</javaee.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>${javaee.version}</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,1 @@
+INSERT INTO products (id, title, price, currency) VALUES (100, 'Gift Card', '9.99', 'EUR')

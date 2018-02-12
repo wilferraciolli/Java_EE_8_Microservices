@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:tns="http://acme.com/schemes/messages/v1" xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://acme.com/schemes/messages/v1"
+        xmlns:common="http://acme.com/schemes/common/v1"
+        xmlns:ecommerce="http://acme.com/schemes/ecommerce/v1"
+        elementFormDefault="qualified" version="1.0">
+
+    <import namespace="http://acme.com/schemes/common/v1" schemaLocation="../../common/v1/CommonTypes.xsd"/>
+    <import namespace="http://acme.com/schemes/ecommerce/v1" schemaLocation="../../ecommerce/v1/ECommerceTypes.xsd"/>
+
+    <complexType name="RetrieveProductRequestMessage">
+        <complexContent>
+            <extension base="common:BaseMessageType">
+                <sequence>
+                    <element name="id" type="string" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+    <complexType name="RetrieveProductResponseMessage">
+        <complexContent>
+            <extension base="common:BaseMessageType">
+                <sequence>
+                    <element name="product" type="ecommerce:Product" minOccurs="0" />
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="ECommerceError">
+        <complexContent>
+            <extension base="common:BaseErrorType" />
+        </complexContent>
+    </complexType>
+
+</schema>
