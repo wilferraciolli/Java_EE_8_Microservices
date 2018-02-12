@@ -1,0 +1,10 @@
+acme-monolith/.DS_Store
+acme-monolith/ear/.DS_Store
+acme-monolith/models/.DS_Store
+acme-monolith/scheme/.DS_Store
+acme-monolith/services/.DS_Store
+acme-monolith/soap/.DS_Store
+acme-monolith/web/.DS_Store
+acme-orders/.idea/
+acme-orders/api/target/
+acme-orders/lib/target/
