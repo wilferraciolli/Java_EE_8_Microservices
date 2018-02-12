@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * The type Rest configuration. DropWizard Configuration class.
+ * DropWizard external Configuration class.
  * Eg external URLs
  */
 public class RestConfiguration extends Configuration {

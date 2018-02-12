@@ -11,6 +11,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -31,7 +32,6 @@ public class RestApplication extends Application<RestConfiguration> {
 
     /**
      * Main.
-     *
      * @param args the args
      * @throws Exception the exception
      */
@@ -85,11 +85,10 @@ public class RestApplication extends Application<RestConfiguration> {
 
     /**
      * Gets auth algorithm.
-     *
      * @param publicKey the public key
      * @return the auth algorithm
      * @throws NoSuchAlgorithmException the no such algorithm exception
-     * @throws InvalidKeySpecException  the invalid key spec exception
+     * @throws InvalidKeySpecException the invalid key spec exception
      */
     private Algorithm getAuthAlgorithm(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
 

@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private Meter completeMeter;
     private Meter canceledMeter;
 
-    //create counter to trocess transacions
+    //create counter to process transactions
     private Counter processingCounter;
     private Histogram cartHistogram;
 
