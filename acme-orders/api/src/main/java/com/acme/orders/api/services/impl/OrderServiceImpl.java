@@ -1,8 +1,12 @@
 package com.acme.orders.api.services.impl;
 
+import com.acme.orders.api.integrations.CatalogueClient;
+import com.acme.orders.api.integrations.CustomerClient;
+import com.acme.orders.api.integrations.lib.catalogue.Product;
 import com.acme.orders.api.mapper.OrderMapper;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
+import com.acme.orders.api.models.db.OrderItemEntity;
 import com.acme.orders.api.services.OrderService;
 import com.acme.orders.api.services.exceptions.EmptyPayloadException;
 import com.acme.orders.api.services.exceptions.OrderServiceException;
@@ -15,10 +19,14 @@ import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Order service implementation.
@@ -26,6 +34,10 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private OrderDAO orderDAO;
+
+    //Add client to get resource from another microservice
+    private CustomerClient customerClient;
+    private CatalogueClient catalogueClient;
 
     //Add custom Metrics
     private Meter createMeter;
@@ -38,14 +50,17 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Instantiates a new Order service.
-     *
-     * @param orderDAO       the order dao
+     * @param orderDAO the order dao
      * @param metricRegistry the metric registry
+     * @param customerClient the customer client
+     * @param catalogueClient the catalogue client
      */
-    public OrderServiceImpl(OrderDAO orderDAO, MetricRegistry metricRegistry) {
+    public OrderServiceImpl(OrderDAO orderDAO, MetricRegistry metricRegistry, CustomerClient customerClient, CatalogueClient catalogueClient) {
 
-        //instantiate the DAO
+        //instantiate the dependencies
         this.orderDAO = orderDAO;
+        this.customerClient = customerClient;
+        this.catalogueClient = catalogueClient;
 
         //instantiate the metrics
         this.createMeter = metricRegistry.meter(OrderServiceImpl.class.getName() + ".create-order");
@@ -83,7 +98,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Create order order.
-     *
      * @param order the order
      * @return the order
      */
@@ -91,8 +105,13 @@ public class OrderServiceImpl implements OrderService {
     public Order createOrder(Order order) {
 
         //check order is null
-        if (order == null) {
+        if (Objects.isNull(order)) {
             throw new EmptyPayloadException(Order.class.getSimpleName());
+        }
+
+        //check for the customer on the customer micro service
+        if (StringUtils.isNotBlank(order.getCustomerId())) {
+            customerClient.findCustomerById(order.getCustomerId());
         }
 
         //check cart is null
@@ -107,6 +126,22 @@ public class OrderServiceImpl implements OrderService {
         orderEntity.setUpdatedAt(date);
         orderEntity.setCreatedAt(date);
         orderEntity.setStatus(OrderStatus.NEW);
+
+        //validate each product on the cart
+        for (OrderItemEntity orderItemEntity : orderEntity.getCart()) {
+            //call the service to load a product
+            Product product = catalogueClient.findByProductId(orderItemEntity.getProductId());
+
+            orderItemEntity.setTitle(product.getTitle());
+            orderItemEntity.setCurrency(product.getCurrency());
+            orderItemEntity.setPrice(product.getPrice());
+
+            //get the order quantity or assumes it is 1
+            BigDecimal quantity = orderItemEntity.getQuantity() != null ? orderItemEntity.getQuantity() : BigDecimal.ONE;
+
+            orderItemEntity.setQuantity( quantity);
+            orderItemEntity.setAmount(product.getPrice().multiply(quantity));
+        }
 
         //persist to the database
         orderDAO.create(orderEntity);

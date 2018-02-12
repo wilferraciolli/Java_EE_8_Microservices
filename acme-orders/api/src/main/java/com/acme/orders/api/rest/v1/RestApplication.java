@@ -1,5 +1,7 @@
 package com.acme.orders.api.rest.v1;
 
+import com.acme.orders.api.integrations.lib.catalogue.imp.CatalogueClientImpl;
+import com.acme.orders.api.integrations.lib.catalogue.imp.CustomerClientImpl;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
 import com.acme.orders.api.models.db.OrderItemEntity;
@@ -24,6 +26,9 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 
 /**
  * The type Rest application. Main application class to extends the configuration class.
@@ -66,10 +71,16 @@ public class RestApplication extends Application<RestConfiguration> {
         environment.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         environment.getObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
+        //create a Jax RS client
+        Client client = ClientBuilder.newClient();
+
         //instantiate dependencies
         OrderService orderService = new OrderServiceImpl(
-                new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
-                environment.metrics()
+                new OrderDAO(hibernate.getSessionFactory(),
+                        environment.metrics()),
+                environment.metrics(),
+                new CustomerClientImpl(client, configuration.getCustomersUrl()),
+                new CatalogueClientImpl(configuration.getCatalogueUrl())
         );
 
         //configure Jersey and add all required classes to it

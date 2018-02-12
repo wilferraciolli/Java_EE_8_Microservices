@@ -18,13 +18,41 @@ public class RestConfiguration extends Configuration {
     @JsonProperty("database")
     private DataSourceFactory database = new DataSourceFactory();
 
+    @NotNull
+    private String customersUrl;
+
+    @NotNull
+    private String catalogueUrl;
+
     /**
      * Gets data source factory.
-     *
      * @return the data source factory
      */
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
+    /**
+     * Gets database.
+     * @return the database
+     */
+    public DataSourceFactory getDatabase() {
+        return database;
+    }
+
+    /**
+     * Gets customers url.
+     * @return the customers url
+     */
+    public String getCustomersUrl() {
+        return customersUrl;
+    }
+
+    /**
+     * Gets catalogue url.
+     * @return the catalogue url
+     */
+    public String getCatalogueUrl() {
+        return catalogueUrl;
+    }
 }
