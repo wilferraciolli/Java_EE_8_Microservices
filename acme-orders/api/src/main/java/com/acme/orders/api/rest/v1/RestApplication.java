@@ -76,8 +76,7 @@ public class RestApplication extends Application<RestConfiguration> {
 
         //instantiate dependencies
         OrderService orderService = new OrderServiceImpl(
-                new OrderDAO(hibernate.getSessionFactory(),
-                        environment.metrics()),
+                new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
                 environment.metrics(),
                 new CustomerClientImpl(client, configuration.getCustomersUrl()),
                 new CatalogueClientImpl(configuration.getCatalogueUrl())

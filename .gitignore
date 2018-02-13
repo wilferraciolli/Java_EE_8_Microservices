@@ -8,3 +8,14 @@ acme-monolith/web/.DS_Store
 acme-orders/.idea/
 acme-orders/api/target/
 acme-orders/lib/target/
+acme-monolith/.idea/
+*.iml
+acme-monolith/ear/target/
+acme-customers/api/target/
+acme-monolith/scheme/target/
+acme-monolith/services/target/
+acme-monolith/soap/target/
+acme-monolith/models/target/
+acme-customers/ib/target/
+acme-monolith/web/target/
+acme-customers/.idea/
