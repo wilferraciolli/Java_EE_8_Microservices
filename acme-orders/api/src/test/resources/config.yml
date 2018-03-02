@@ -1,0 +1,20 @@
+server:
+  applicationConnectors:
+  - type: http
+    port: 6000
+  adminConnectors:
+  - type: http
+    port: 6001
+database:
+  driverClass: org.h2.Driver
+  user: sa
+  password: sa
+  url: jdbc:h2:mem:acme-customers;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  properties:
+    charSet: UTF-8
+    hibernate.hbm2ddl.auto: create
+
+#  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+customersUrl: http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1
+catalogueUrl: http://localhost:9080/acme-monolith-soap/ECommerceWs?wsdl
