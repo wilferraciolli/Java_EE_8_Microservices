@@ -9,7 +9,7 @@ package com.acme.orders.api.integrations;
 import com.acme.orders.api.integrations.lib.catalogue.Customer;
 
 /**
- * The interface Customer client. This is to integrate Order microservice with Customer Microservice.
+ * The interface Customer client. This is to integrate with Customer Microservice.
  */
 public interface CustomerClient {
 

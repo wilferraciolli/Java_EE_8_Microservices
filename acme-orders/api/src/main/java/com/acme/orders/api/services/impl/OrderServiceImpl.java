@@ -2,6 +2,7 @@ package com.acme.orders.api.services.impl;
 
 import com.acme.orders.api.integrations.CatalogueClient;
 import com.acme.orders.api.integrations.CustomerClient;
+import com.acme.orders.api.integrations.PaymentsClient;
 import com.acme.orders.api.integrations.lib.catalogue.Product;
 import com.acme.orders.api.mapper.OrderMapper;
 import com.acme.orders.api.models.OrderDAO;
@@ -14,6 +15,7 @@ import com.acme.orders.api.services.exceptions.ResourceNotFoundException;
 import com.acme.orders.lib.v1.Order;
 import com.acme.orders.lib.v1.OrderStatus;
 import com.acme.orders.lib.v1.common.OrderServiceErrorCode;
+import com.acme.payments.lib.Transaction;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Meter;
@@ -38,6 +40,7 @@ public class OrderServiceImpl implements OrderService {
     //Add client to get resource from another microservice
     private CustomerClient customerClient;
     private CatalogueClient catalogueClient;
+    private PaymentsClient paymentsClient;
 
     //Add custom Metrics
     private Meter createMeter;
@@ -55,12 +58,16 @@ public class OrderServiceImpl implements OrderService {
      * @param customerClient the customer client
      * @param catalogueClient the catalogue client
      */
-    public OrderServiceImpl(OrderDAO orderDAO, MetricRegistry metricRegistry, CustomerClient customerClient, CatalogueClient catalogueClient) {
+    public OrderServiceImpl(OrderDAO orderDAO, MetricRegistry metricRegistry,
+            CustomerClient customerClient,
+            CatalogueClient catalogueClient,
+            PaymentsClient paymentsClient) {
 
         //instantiate the dependencies
         this.orderDAO = orderDAO;
         this.customerClient = customerClient;
         this.catalogueClient = catalogueClient;
+        this.paymentsClient = paymentsClient;
 
         //instantiate the metrics
         this.createMeter = metricRegistry.meter(OrderServiceImpl.class.getName() + ".create-order");
@@ -171,16 +178,15 @@ public class OrderServiceImpl implements OrderService {
         //mark the transaction as processing
         processingCounter.inc();
 
-        try {
-            //this will call the pay service later on
-            Thread.sleep(10000);
-        } catch (InterruptedException ignored) {
-        }
+        //call payments micro service to complete the order
+        Transaction transaction = paymentsClient.createTransaction(orderEntity);
 
         //set the transaction to finish
         processingCounter.dec();
 
         orderEntity.setStatus(OrderStatus.COMPLETED);
+        //save the id of the transaction on the order so it can be queried later on
+        orderEntity.setTransactionId(transaction.getId());
 
         //add as metric
         completeMeter.mark();

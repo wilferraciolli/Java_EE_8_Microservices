@@ -1,7 +1,8 @@
 package com.acme.orders.api.rest.v1;
 
-import com.acme.orders.api.integrations.lib.catalogue.imp.CatalogueClientImpl;
-import com.acme.orders.api.integrations.lib.catalogue.imp.CustomerClientImpl;
+import com.acme.orders.api.integrations.imp.CatalogueClientImpl;
+import com.acme.orders.api.integrations.imp.CustomerClientImpl;
+import com.acme.orders.api.integrations.imp.PaymentsClientImpl;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
 import com.acme.orders.api.models.db.OrderItemEntity;
@@ -79,7 +80,8 @@ public class RestApplication extends Application<RestConfiguration> {
                 new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
                 environment.metrics(),
                 new CustomerClientImpl(client, configuration.getCustomersUrl()),
-                new CatalogueClientImpl(configuration.getCatalogueUrl())
+                new CatalogueClientImpl(configuration.getCatalogueUrl()),
+                new PaymentsClientImpl(client, configuration.getPaymentsUrl())
         );
 
         //configure Jersey and add all required classes to it

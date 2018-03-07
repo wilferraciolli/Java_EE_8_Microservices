@@ -24,6 +24,9 @@ public class RestConfiguration extends Configuration {
     @NotNull
     private String catalogueUrl;
 
+    @NotNull
+    private String paymentsUrl;
+
     /**
      * Gets data source factory.
      * @return the data source factory
@@ -54,5 +57,13 @@ public class RestConfiguration extends Configuration {
      */
     public String getCatalogueUrl() {
         return catalogueUrl;
+    }
+
+    /**
+     * Gets payments url.
+     * @return the payments url
+     */
+    public String getPaymentsUrl() {
+        return paymentsUrl;
     }
 }

@@ -18,3 +18,4 @@ database:
   validationQuery: "/* MyApplication Health Check */ SELECT 1"
 customersUrl: http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1
 catalogueUrl: http://localhost:9080/acme-monolith-soap/ECommerceWs?wsdl
+paymentsUrl: http://localhost:8000
