@@ -1,0 +1,322 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Java EE Microservices",
+		"_postman_id": "b2c30c6f-373d-f579-7c0e-d51ddda6b253",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Customers API",
+			"description": "",
+			"item": [
+				{
+					"name": "get Customers",
+					"request": {
+						"url": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "71e994dc-c33f-4ad7-b674-af660f34002c",
+							"name": "Default",
+							"originalRequest": {
+								"url": "{{url}}/localhost:8080/books",
+								"method": "GET",
+								"header": [],
+								"body": {}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "get Customer by id",
+					"request": {
+						"url": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/092abfb0-6bde-4b02-a2a2-3f3b03d597a9",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "a93920d7-9c55-416f-b957-29e03ce41a48",
+							"name": "Default",
+							"originalRequest": {
+								"url": "{{url}}/localhost:8080/books",
+								"method": "GET",
+								"header": [],
+								"body": {}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "Delete Customer by id",
+					"request": {
+						"url": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/092abfb0-6bde-4b02-a2a2-3f3b03d597a9",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "28882ef0-4e8d-4507-931e-5d9ab0f25c61",
+							"name": "Default",
+							"originalRequest": {
+								"url": "{{url}}/localhost:8080/books",
+								"method": "GET",
+								"header": [],
+								"body": {}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "Hello World"
+						}
+					]
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"url": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "1234",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"Wiliam\",\n  \"lastName\": \"Ferraciolli\",\n  \"email\": \"wiliam334@hotmail.com\",\n  \"dateOfBirth\": \"1990-09-11T07:40:27:40+00:00\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"url": "http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1/customers/1234",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "1234"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\":\"1234\",\n  \"firstName\": \"Wiliam Updated\",\n  \"lastName\": \"Ferraciolli updated\",\n  \"email\": \"wiliam334@hotmail.com updt\",\n  \"dateOfBirth\": \"1990-09-11T07:40:27:40+00:00\",\n  \"status\": \"ACTIVE\"\n}"
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders API",
+			"description": "",
+			"item": [
+				{
+					"name": "Get orders",
+					"request": {
+						"url": "http://localhost:6000/orders",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Create order",
+					"request": {
+						"url": "http://localhost:6000/orders",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": \"1234\",\n  \"cart\": [\n    {\n      \"productId\": \"100\"\n    }\n    ]\n}"
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Complete order",
+					"request": {
+						"url": "http://localhost:9000/orders/{{orderId}}/complete",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel order",
+					"request": {
+						"url": "http://localhost:9000/orders/{{orderId}}/complete",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Metrics (Admin)",
+					"request": {
+						"url": "http://localhost:6001/metrics",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Get Health check (Admin)",
+					"request": {
+						"url": "http://localhost:6001/healthcheck",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"description": "",
+			"item": [
+				{
+					"name": "Get transactions",
+					"request": {
+						"url": "localhost:8000/transactions",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get metrics",
+					"request": {
+						"url": "localhost:8000/metrics",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Get service's health",
+					"request": {
+						"url": "localhost:8000/health",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create transaction",
+					"request": {
+						"url": "localhost:8000/transactions",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"currency\": \"EUR\",\n\t\"amount\": \"10.00\",\n\t\"nonce\": \"12345678\",\n\t\"customerId\": \"1234\",\n\t\"orderId\": \"19462\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
