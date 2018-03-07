@@ -9,6 +9,7 @@ import com.acme.orders.api.models.db.OrderItemEntity;
 import com.acme.orders.api.rest.v1.mappers.*;
 import com.acme.orders.api.rest.v1.resources.OrderResource;
 import com.acme.orders.api.services.OrderService;
+import com.acme.orders.api.services.health.IntegrationHealthCheck;
 import com.acme.orders.api.services.impl.OrderServiceImpl;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,6 +31,8 @@ import java.util.Base64;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+
+import org.glassfish.jersey.client.ClientProperties;
 
 /**
  * The type Rest application. Main application class to extends the configuration class.
@@ -93,6 +96,12 @@ public class RestApplication extends Application<RestConfiguration> {
         environment.jersey().register(ResourceNotFoundMapper.class);
         environment.jersey().register(OrderServiceMapper.class);
 
+        //Add a client to call other micro services to check their health
+        Client healthClient = ClientBuilder.newClient()
+                .property(ClientProperties.CONNECT_TIMEOUT, 1_000)
+                .property(ClientProperties.READ_TIMEOUT, 1_000);
+        //register the health end point with dropwizard
+        environment.healthChecks().register("payments-api", new IntegrationHealthCheck(healthClient, configuration.getPaymentsUrl() + "/health"));
     }
 
     /**
