@@ -42,11 +42,15 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.acme</groupId>
-            <artifactId>acme-customers-lib</artifactId>
-        </dependency>
+	
+		<dependency>
+			<groupId>com.acme</groupId>
+			<artifactId>acme-customers-lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.acme</groupId>
+			<artifactId>acme-payments-lib</artifactId>
+		</dependency>
 
         <dependency>
             <groupId>io.dropwizard</groupId>

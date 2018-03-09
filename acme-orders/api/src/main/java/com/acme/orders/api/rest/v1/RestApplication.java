@@ -1,13 +1,15 @@
 package com.acme.orders.api.rest.v1;
 
-import com.acme.orders.api.integrations.lib.catalogue.imp.CatalogueClientImpl;
-import com.acme.orders.api.integrations.lib.catalogue.imp.CustomerClientImpl;
+import com.acme.orders.api.integrations.imp.CatalogueClientImpl;
+import com.acme.orders.api.integrations.imp.CustomerClientImpl;
+import com.acme.orders.api.integrations.imp.PaymentsClientImpl;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
 import com.acme.orders.api.models.db.OrderItemEntity;
 import com.acme.orders.api.rest.v1.mappers.*;
 import com.acme.orders.api.rest.v1.resources.OrderResource;
 import com.acme.orders.api.services.OrderService;
+import com.acme.orders.api.services.health.IntegrationHealthCheck;
 import com.acme.orders.api.services.impl.OrderServiceImpl;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,6 +31,8 @@ import java.util.Base64;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+
+import org.glassfish.jersey.client.ClientProperties;
 
 /**
  * The type Rest application. Main application class to extends the configuration class.
@@ -79,7 +83,8 @@ public class RestApplication extends Application<RestConfiguration> {
                 new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
                 environment.metrics(),
                 new CustomerClientImpl(client, configuration.getCustomersUrl()),
-                new CatalogueClientImpl(configuration.getCatalogueUrl())
+                new CatalogueClientImpl(configuration.getCatalogueUrl()),
+                new PaymentsClientImpl(client, configuration.getPaymentsUrl())
         );
 
         //configure Jersey and add all required classes to it
@@ -91,6 +96,12 @@ public class RestApplication extends Application<RestConfiguration> {
         environment.jersey().register(ResourceNotFoundMapper.class);
         environment.jersey().register(OrderServiceMapper.class);
 
+        //Add a client to call other micro services to check their health
+        Client healthClient = ClientBuilder.newClient()
+                .property(ClientProperties.CONNECT_TIMEOUT, 1_000)
+                .property(ClientProperties.READ_TIMEOUT, 1_000);
+        //register the health end point with dropwizard
+        environment.healthChecks().register("payments-api", new IntegrationHealthCheck(healthClient, configuration.getPaymentsUrl() + "/health"));
     }
 
     /**

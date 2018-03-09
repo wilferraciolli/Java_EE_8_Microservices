@@ -27,6 +27,7 @@
         <!-- server details -->
         <dropwizard.version>1.1.4</dropwizard.version>
         <customers.version>1.0.0-SNAPSHOT</customers.version>
+		<payments.version>1.0.0-SNAPSHOT</payments.version>
         <h2.version>1.4.196</h2.version>
         <jwt.version>3.2.0</jwt.version>
         <mockito-version>2.8.9</mockito-version>
@@ -57,11 +58,16 @@
                 <version>${jwt.version}</version>
             </dependency>
 
-            <!-- micro service dependency -->
+            <!-- micro services dependency, this is to add the lib module of each so each service can know the shape of data to expect -->
             <dependency>
                 <groupId>com.acme</groupId>
                 <artifactId>acme-customers-lib</artifactId>
                 <version>${customers.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acme</groupId>
+                <artifactId>acme-payments-lib</artifactId>
+                <version>${payments.version}</version>
             </dependency>
 
             <dependency>

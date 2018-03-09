@@ -4,7 +4,7 @@
  * Author   : ferraciolliw
  * Date     : 12 Feb 2018
  */
-package com.acme.orders.api.integrations.lib.catalogue.imp;
+package com.acme.orders.api.integrations.imp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
