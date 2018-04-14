@@ -12,6 +12,7 @@ import com.acme.orders.api.rest.v1.providers.JacksonProvider;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
  * This class initializes the micro service so it can be called via HTTP to test.
  * Note that it needs a config.yaml file to configure the server.
  */
+@Ignore
 public class OrderResourceTest {
 
     /**

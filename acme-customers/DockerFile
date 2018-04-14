@@ -1,0 +1,3 @@
+FROM payara/micro:174
+
+COPY api/target/*.war /opt/payara/deployments

@@ -28,7 +28,7 @@
 					},
 					"response": [
 						{
-							"id": "71e994dc-c33f-4ad7-b674-af660f34002c",
+							"id": "493ca743-b334-4b74-a2bd-18f574950b31",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
@@ -62,7 +62,7 @@
 					},
 					"response": [
 						{
-							"id": "a93920d7-9c55-416f-b957-29e03ce41a48",
+							"id": "4fd9ae50-1bf0-4181-961f-4a20ff5e905e",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
@@ -95,7 +95,7 @@
 					},
 					"response": [
 						{
-							"id": "28882ef0-4e8d-4507-931e-5d9ab0f25c61",
+							"id": "146852e9-9959-4b20-bb79-336e80c3cdbf",
 							"name": "Default",
 							"originalRequest": {
 								"url": "{{url}}/localhost:8080/books",
@@ -179,8 +179,20 @@
 				},
 				{
 					"name": "Create order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonOutput = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"orderId\", jsonOutput.id);"
+								]
+							}
+						}
+					],
 					"request": {
-						"url": "http://localhost:6000/orders",
+						"url": "http://localhost:9000/orders",
 						"method": "POST",
 						"header": [
 							{
@@ -205,7 +217,8 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"description": ""
 							}
 						],
 						"body": {
@@ -224,7 +237,8 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json"
+								"value": "application/json",
+								"description": ""
 							}
 						],
 						"body": {
@@ -249,7 +263,7 @@
 				{
 					"name": "Get Health check (Admin)",
 					"request": {
-						"url": "http://localhost:6001/healthcheck",
+						"url": "http://localhost:9001/healthcheck",
 						"method": "GET",
 						"header": [],
 						"body": {},

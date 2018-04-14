@@ -1,0 +1,18 @@
+version: '3'
+services:
+  payments:
+    image: "acme/payments:latest"
+    ports:
+     - "8000:8000"
+  customers:
+    image: "acme/customers:latest"
+    ports:
+     - "8080:8080"
+  orders:
+    image: "acme/orders:latest"
+    ports:
+     - "9000:9000"
+     - "9001:9001"
+    environment:
+      CUSTOMERS_URL: http://customers:8080/acme-customers-api-1.0.0-SNAPSHOT/v1
+      PAYMENTS_URL: http://payments:8000

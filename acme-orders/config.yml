@@ -1,10 +1,10 @@
 server:
   applicationConnectors:
   - type: http
-    port: 6000
+    port: 9000
   adminConnectors:
   - type: http
-    port: 6001
+    port: 9001
 database:
   driverClass: org.h2.Driver
   user: sa
@@ -16,6 +16,8 @@ database:
 
 #  # the SQL query to run when validating a connection's liveness
   validationQuery: "/* MyApplication Health Check */ SELECT 1"
-customersUrl: http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1
-catalogueUrl: http://localhost:9080/acme-monolith-soap/ECommerceWs?wsdl
-paymentsUrl: http://localhost:8000
+catalogueMock: true
+customersUrl: ${CUSTOMERS_URL:-http://localhost:8080/acme-customers-api-1.0.0-SNAPSHOT/v1}
+catalogueUrl: ${CATALOGUE_URL:-http://localhost:9080/acme-monolith-soap/ECommerceWs?wsdl}
+paymentsUrl: ${PAYMENTS_URL:-http://localhost:8000}
+authPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw1B8hHLlKBMcHSDuEsOFkzoa2vBlmgOkhebYWlgkU+5G3ENIIk1ijVrT3m/sJUKpurGwedQd0oJ2mCOIRVsqJ9Sf8uKJ5WSnxMq5dFEy7mY2gzDjppxvdXQqNvhoi8jPqzSa3gkd0brK0zlSzP5AYxKOsvibobQXqzn/0+yqLOXq6n+PwqGocWYlyMq3GgueJ7u/CuT/JDyyggnCtDCxaz3BKtrDbdQBQywxdSZl9DFQh78rg6YFWvs7mlf1fQFLY64Z+LL+7fYttxLxyw2wIV4jYNW5nuDhrc4LgLCWR3y+HC3YHhCArPZzhLUxDj+yiu1vRD5UhWp8HUDRwlXN8wIDAQAB

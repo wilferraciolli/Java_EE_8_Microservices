@@ -18,6 +18,8 @@ public class RestConfiguration extends Configuration {
     @JsonProperty("database")
     private DataSourceFactory database = new DataSourceFactory();
 
+    private Boolean catalogueMock;
+
     @NotNull
     private String customersUrl;
 
@@ -25,7 +27,11 @@ public class RestConfiguration extends Configuration {
     private String catalogueUrl;
 
     @NotNull
+    @JsonProperty("paymentsUrl")
     private String paymentsUrl;
+
+    @NotNull
+    private String authPublicKey;
 
     /**
      * Gets data source factory.
@@ -65,5 +71,21 @@ public class RestConfiguration extends Configuration {
      */
     public String getPaymentsUrl() {
         return paymentsUrl;
+    }
+
+    /**
+     * Gets catalogue mock.
+     * @return the catalogue mock
+     */
+    public Boolean getCatalogueMock() {
+        return catalogueMock;
+    }
+
+    /**
+     * Gets auth public key.
+     * @return the auth public key
+     */
+    public String getAuthPublicKey() {
+        return authPublicKey;
     }
 }

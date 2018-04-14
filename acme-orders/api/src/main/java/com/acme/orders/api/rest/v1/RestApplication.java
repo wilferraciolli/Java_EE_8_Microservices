@@ -1,8 +1,10 @@
 package com.acme.orders.api.rest.v1;
 
+import com.acme.orders.api.integrations.CatalogueClient;
 import com.acme.orders.api.integrations.imp.CatalogueClientImpl;
 import com.acme.orders.api.integrations.imp.CustomerClientImpl;
 import com.acme.orders.api.integrations.imp.PaymentsClientImpl;
+import com.acme.orders.api.integrations.mock.CatalogueClientMock;
 import com.acme.orders.api.models.OrderDAO;
 import com.acme.orders.api.models.db.OrderEntity;
 import com.acme.orders.api.models.db.OrderItemEntity;
@@ -17,6 +19,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import io.dropwizard.Application;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -60,6 +64,9 @@ public class RestApplication extends Application<RestConfiguration> {
 
     @Override
     public void initialize(Bootstrap<RestConfiguration> bootstrap) {
+        //Add configuration to mock catalogue web server
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
 
         bootstrap.addBundle(hibernate);
     }
@@ -78,12 +85,17 @@ public class RestApplication extends Application<RestConfiguration> {
         //create a Jax RS client
         Client client = ClientBuilder.newClient();
 
+        //mock catalogue service
+        CatalogueClient catalogueClient = configuration.getCatalogueMock() ?
+                new CatalogueClientMock() :
+                new CatalogueClientImpl(configuration.getCatalogueUrl());
+
         //instantiate dependencies
         OrderService orderService = new OrderServiceImpl(
                 new OrderDAO(hibernate.getSessionFactory(), environment.metrics()),
                 environment.metrics(),
                 new CustomerClientImpl(client, configuration.getCustomersUrl()),
-                new CatalogueClientImpl(configuration.getCatalogueUrl()),
+                catalogueClient,
                 new PaymentsClientImpl(client, configuration.getPaymentsUrl())
         );
 
